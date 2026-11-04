@@ -1,0 +1,50 @@
+{
+  "index_patterns": [
+    "mini-soc-auth-*"
+  ],
+  "template": {
+    "settings": {
+      "index": {
+        "lifecycle": {
+          "name": "mini-soc-auth-7d"
+        },
+        "number_of_shards": "1",
+        "number_of_replicas": "0"
+      }
+    },
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "host": {
+          "properties": {
+            "name": {
+              "type": "keyword"
+            }
+          }
+        },
+        "message": {
+          "type": "match_only_text"
+        },
+        "event": {
+          "properties": {
+            "module": {
+              "type": "keyword"
+            },
+            "dataset": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  },
+  "composed_of": [
+    "mini-soc-auth-fields"
+  ],
+  "priority": 200,
+  "_meta": {
+    "description": "Logs d'authentification du laboratoire Mini-SOC"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "description": "Extraction des commandes sudo du laboratoire",
+  "processors": [
+    {
+      "grok": {
+        "if": "(ctx.log?.syslog?.appname == 'sudo' || ctx.journald?.process?.name == 'sudo') && ctx.message != null && ctx.message.contains('COMMAND=')",
+        "field": "message",
+        "patterns": [
+          "^\\s*%{NOTSPACE:user.name}\\s*:\\s*TTY=%{DATA:sudo.tty}\\s*;\\s*PWD=%{DATA:process.working_directory}\\s*;\\s*USER=%{NOTSPACE:user.effective.name}\\s*;\\s*COMMAND=%{GREEDYDATA:sudo.command}$"
+        ]
+      }
+    },
+    {
+      "set": {
+        "if": "ctx.sudo?.command != null",
+        "field": "event.action",
+        "value": "sudo-command"
+      }
+    }
+  ],
+  "on_failure": [
+    {
+      "append": {
+        "field": "tags",
+        "value": "mini_soc_parse_failure"
+      }
+    },
+    {
+      "set": {
+        "field": "error.message",
+        "value": "{{{_ingest.on_failure_message}}}"
+      }
+    }
+  ]
+}

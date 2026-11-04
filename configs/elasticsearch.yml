@@ -1,0 +1,21 @@
+cluster.name: mini-soc
+node.name: es01
+
+discovery.type: single-node
+
+network.host: 0.0.0.0
+http.port: 9200
+
+# Le transport entre nœuds reste sur la boucle locale du conteneur.
+transport.host: 127.0.0.1
+
+xpack.security.enabled: true
+xpack.security.autoconfiguration.enabled: false
+
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.key: certs/elasticsearch.key
+xpack.security.http.ssl.certificate: certs/elasticsearch.crt
+xpack.security.http.ssl.certificate_authorities: ["certs/ca.crt"]
+
+# Désactiver les tâches de machine learning dans ce petit laboratoire.
+xpack.ml.enabled: false

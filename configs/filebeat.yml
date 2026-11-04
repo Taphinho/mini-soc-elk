@@ -1,0 +1,51 @@
+filebeat.inputs:
+  - type: journald
+    id: mini-soc-auth-journal
+    publisher_pipeline.disable_host: true
+    paths:
+      - /var/log/journal
+
+    seek: since
+    since: -24h
+
+    include_matches.match:
+      - SYSLOG_IDENTIFIER=sudo
+      - SYSLOG_IDENTIFIER=sshd
+      - SYSLOG_IDENTIFIER=sshd-session
+      - SYSLOG_IDENTIFIER=su
+      - SYSLOG_IDENTIFIER=login
+
+    processors:
+      - add_fields:
+          target: event
+          fields:
+            kind: event
+            dataset: linux.auth
+      - add_fields:
+          target: host
+          fields:
+            name: white-hat
+
+
+# Modèle et politique ILM déjà créés avec le compte administrateur.
+setup.template.enabled: false
+setup.ilm.enabled: false
+
+output.elasticsearch:
+  hosts: ["https://elasticsearch:9200"]
+  pipeline: mini-soc-auth-v1
+  api_key: "${FILEBEAT_API_KEY}"
+  ssl.certificate_authorities:
+    - /usr/share/filebeat/certs/ca.crt
+  ssl.verification_mode: full
+  index: "mini-soc-auth-%{+yyyy.MM.dd}"
+  worker: 1
+  bulk_max_size: 64
+
+queue.mem:
+  events: 256
+  flush.min_events: 64
+  flush.timeout: 5s
+
+logging.level: info
+logging.to_files: false

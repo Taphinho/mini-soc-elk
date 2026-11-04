@@ -1,0 +1,23 @@
+# Secrets locaux
+.env
+.env.*
+!.env.example
+**/secrets/**
+*.key
+*.p12
+*.pfx
+
+# Certificats et clés générés pour le laboratoire
+/docker/certs/**
+
+# Données et journaux locaux
+/data/
+/logs/
+*.log
+
+# Fichiers temporaires
+*.swp
+*~
+
+# Sortie créée accidentellement par une redirection shell
+/sudo

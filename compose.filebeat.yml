@@ -1,0 +1,35 @@
+services:
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:${STACK_VERSION:?Définir STACK_VERSION dans .env}
+    user: "0:0"
+    restart: "no"
+    command: ["-e"]
+
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+    mem_limit: 512m
+    cpus: 0.5
+
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+    volumes:
+      - ./configs/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./docker/certs/ca/ca.crt:/usr/share/filebeat/certs/ca.crt:ro
+      - /var/log/journal:/var/log/journal:ro
+      - filebeat_data:/usr/share/filebeat/data
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  filebeat_data:
+    external: true
+    name: mini-soc_filebeat_data

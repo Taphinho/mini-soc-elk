@@ -1,0 +1,39 @@
+{
+  "template": {
+    "mappings": {
+      "properties": {
+        "sudo": {
+          "properties": {
+            "tty": {
+              "type": "keyword"
+            },
+            "command": {
+              "type": "wildcard"
+            }
+          }
+        },
+        "event": {
+          "properties": {
+            "action": {
+              "type": "keyword"
+            }
+          }
+        },
+        "user": {
+          "properties": {
+            "effective": {
+              "properties": {
+                "name": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "name": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  }
+}

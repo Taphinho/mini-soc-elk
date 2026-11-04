@@ -1,0 +1,18 @@
+server.name: mini-soc-kibana
+server.host: 0.0.0.0
+server.port: 5601
+server.publicBaseUrl: "https://localhost:5601"
+
+server.ssl.enabled: true
+server.ssl.certificate: /usr/share/kibana/config/certs/kibana.crt
+server.ssl.key: /usr/share/kibana/config/certs/kibana.key
+
+elasticsearch.hosts: ["https://elasticsearch:9200"]
+elasticsearch.username: kibana_system
+elasticsearch.ssl.certificateAuthorities:
+  - /usr/share/kibana/config/certs/ca.crt
+elasticsearch.ssl.verificationMode: full
+
+xpack.security.secureCookies: true
+
+telemetry.enabled: false

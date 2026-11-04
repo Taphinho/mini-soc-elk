@@ -1,0 +1,44 @@
+services:
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION:?Définir STACK_VERSION dans .env}
+    user: "1000:0"
+    restart: "no"
+
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+    mem_limit: 2g
+    cpus: 2.0
+
+    ports:
+      - "127.0.0.1:5601:5601"
+
+    volumes:
+      - kibana_data:/usr/share/kibana/data
+      - ./configs/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+      - ./configs/kibana.node.options:/usr/share/kibana/config/node.options:ro
+      - ./docker/certs/kibana:/usr/share/kibana/config/certs:ro
+      - ./configs/secrets/kibana/kibana.keystore:/usr/share/kibana/config/kibana.keystore:ro
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          curl --silent --show-error --fail
+          --cacert /usr/share/kibana/config/certs/ca.crt
+          --output /dev/null
+          https://localhost:5601/api/status
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  kibana_data:

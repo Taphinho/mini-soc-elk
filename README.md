@@ -459,17 +459,6 @@ df -h .
 - Le message sudo ne prouve pas la réussite finale de la commande et ne
   montre pas toutes les commandes exécutées ensuite dans le shell.
 
-## Vérifier les artefacts avant publication
-
-```bash
-git status --short --untracked-files=all
-```
-
-Ne publier aucun fichier de `configs/secrets`, aucune clé privée, ni
-`.env`. Examiner aussi les captures et rapports avant publication.
-Le `.gitignore` protège l’ajout habituel des secrets, mais ne remplace pas
-la revue du contenu et ne retire pas des secrets déjà suivis par Git.
-
 ## Références
 
 - [Elasticsearch avec Docker](https://www.elastic.co/docs/deploy-manage/deploy/self-managed/install-elasticsearch-docker-configure)
